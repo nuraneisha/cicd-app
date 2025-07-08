@@ -20,7 +20,7 @@ export default function App() {
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type='email'
-            placeholder='Enter email'
+            placeholder='Enter email address'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
