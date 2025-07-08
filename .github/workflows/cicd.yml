@@ -1,0 +1,44 @@
+name: Continuous Integration
+
+on: 
+    pull_request:
+      branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: "16"
+
+      - name : Install dependencies
+        run : npm Install
+
+      - name : Build 
+        run: npm run build
+
+      - name : Run test
+        run: npm test
+
+      - name: Send email notification if build fail
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        width: 
+          server_address : smtp@gmail.com
+          server_port: 587
+          username: ${{secrets.EMAIL_USERNAME}}
+          password: ${{secrets.EMAIL_PASSWORD}}
+          subject: Github Actions - Build Failure
+          body: |
+            The recent build has failed.
+
+            - Repository: ${{github.repository}}
+            - Workflow: ${{github.workflow}}
+            - PR Link : ${{github.event.pull_request.html_url}}
+          to: nuraneisha9@gmail.com
+          from: CI Bot <ci-bot@example.com>
